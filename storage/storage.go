@@ -30,6 +30,8 @@ func (st *Storage) Save() error {
 		return err
 	}
 
+	defer f.Close()
+
 	return json.NewEncoder(f).Encode(st.data)
 }
 

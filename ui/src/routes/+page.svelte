@@ -118,11 +118,10 @@
         // Read the file as binary data instead of using FormData
         const fileContent = await file.arrayBuffer();
 
-        const res = await fetch('/api/file', {
+        const res = await fetch('/api/upload/'+file.name, {
           method: 'POST',
           headers: {
-            'Content-Type': file.type,
-            'Content-Disposition': `attachment; filename="${file.name}"`
+            'Content-Type': file.type
           },
           body: fileContent
         });

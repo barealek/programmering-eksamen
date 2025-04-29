@@ -1,0 +1,18 @@
+###
+POST http://localhost:3000/api/upload/test.png
+Content-Type: image/jpeg
+
+< jamaica.jpg
+
+
+###
+POST http://localhost:3000/api/upload/termius.exe?key=hemmeligkode
+Content-Type: binary/octet-stream
+
+< C:\Users\aleks\Downloads\Install Termius.exe
+
+###
+POST http://localhost:3000/api/upload/morten.txt?key=privat
+Content-Type: text/plain
+
+Hej morten, how does it go with your exam?

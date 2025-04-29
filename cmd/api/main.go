@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/barealek/programmering-eksamen/api"
 	"github.com/barealek/programmering-eksamen/storage"
@@ -9,7 +10,9 @@ import (
 
 func main() {
 
-	st := storage.NewStorage("dataindex.json")
+	os.Mkdir("data", 0755)
+
+	st := storage.NewStorage("data/dataindex.json")
 
 	api := api.NewApi(st)
 
