@@ -41,7 +41,7 @@
       name: file.name,
       size: file.size,
       type: file.type,
-      url: fileData.url,
+      url: location.origin + "/download/" + fileData.id,
       code: fileData.code,
       date: new Date().toISOString()
     };
@@ -118,7 +118,7 @@
         // Read the file as binary data instead of using FormData
         const fileContent = await file.arrayBuffer();
 
-        const res = await fetch('/api/upload/'+file.name, {
+        const res = await fetch('/api/'+file.name, {
           method: 'POST',
           headers: {
             'Content-Type': file.type

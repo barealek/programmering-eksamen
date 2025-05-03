@@ -7,7 +7,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
-	"os"
+	"strconv"
 
 	"github.com/barealek/programmering-eksamen/encryption"
 	"github.com/barealek/programmering-eksamen/storage"
@@ -20,12 +20,21 @@ func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 	id := uuid.New().String()
 
 	krypteringsKey := r.URL.Query().Get("key")
+	antalDownloadsStr := r.URL.Query().Get("downloads")
+	antalDownloads, err := strconv.Atoi(antalDownloadsStr)
+	if antalDownloadsStr != "" && err != nil {
+		http.Error(w, "Set downloads to a number", http.StatusBadRequest)
+		return
+	}
+	if antalDownloadsStr == "" {
+		antalDownloads = -1 // Uendelig downloads
+	}
 
 	var writeChain io.Writer
 	defer r.Body.Close()
 
 	// Disk
-	fileDst, err := os.Create("data/" + id + ".bin")
+	fileDst, err := a.st.FileDest(id)
 	if err != nil {
 		http.Error(w, "Failed to create file", http.StatusInternalServerError)
 		return
@@ -63,11 +72,11 @@ func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	elem := storage.Entry{
-		ID:          uuid.New().String(),
-		Filnavn:     navn,
-		Sti:         fmt.Sprintf("data/%s", id+".bin"),
-		Krypteret:   krypteringsKey != "",
-		AdminSecret: generateRandomString(12),
+		ID:               id,
+		Filnavn:          navn,
+		Krypteret:        krypteringsKey != "",
+		AdminSecret:      generateRandomString(12),
+		DownloadsTilbage: antalDownloads,
 	}
 
 	err = a.st.Insert(&elem)
@@ -75,12 +84,12 @@ func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)
 		return
 	}
-	go a.st.Save()
+	a.st.Save()
 
 	fmt.Println("Skrev", n, "bytes fra", r.RemoteAddr, "til disk")
 
 	json.NewEncoder(w).Encode(map[string]string{
-		"url":  "http://localhost:4321/download/" + elem.ID,
+		"id":   elem.ID,
 		"code": elem.AdminSecret,
 	})
 }
