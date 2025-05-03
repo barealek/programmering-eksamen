@@ -1,8 +1,8 @@
 package storage
 
-func removeFromSlice(slice []*Entry, item *Entry) []*Entry {
+func removeFromSlice[E comparable](slice []E, item E) []E {
 	for i, v := range slice {
-		if v.ID == item.ID {
+		if v == item {
 			return append(slice[:i], slice[i+1:]...)
 		}
 	}
