@@ -26,11 +26,9 @@ func (st *fs) Load() error {
 	st.mu.Lock()
 	defer st.mu.Unlock()
 
-	fmt.Println("Opening", st.fileName)
 	f, err := os.OpenFile(st.fileName, os.O_RDONLY, 0644) // Changed flags
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println("File not found, starting with empty storage.")
 			return nil
 		}
 		return err
@@ -48,11 +46,6 @@ func (st *fs) Save() error {
 	f, err := os.OpenFile(st.fileName, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		return err
-	}
-
-	fmt.Println("Saving storage")
-	for _, e := range st.data {
-		fmt.Println(e)
 	}
 
 	defer f.Close()

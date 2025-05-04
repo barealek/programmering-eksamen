@@ -16,24 +16,25 @@ import (
 
 func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 
+	// Hent vigtige informationer fra HTTp-requesten
 	navn := r.PathValue("filnavn")
-	id := uuid.New().String()
-
 	krypteringsKey := r.URL.Query().Get("key")
 	antalDownloadsStr := r.URL.Query().Get("downloads")
-	antalDownloads, err := strconv.Atoi(antalDownloadsStr)
+	antalDownloads, err := strconv.Atoi(antalDownloadsStr) // Brug strconv til at parse antalDownloads fra en string til et heltal
 	if antalDownloadsStr != "" && err != nil {
 		http.Error(w, "Set downloads to a number", http.StatusBadRequest)
 		return
 	}
+
 	if antalDownloadsStr == "" {
-		antalDownloads = -1 // Uendelig downloads
+		antalDownloads = -1 // Hvis antalDownloads ikke er angivet, sæt det til -1, som vi har defineret som uendeligt downloads
 	}
 
 	var writeChain io.Writer
 	defer r.Body.Close()
 
 	// Disk
+	id := uuid.New().String()
 	fileDst, err := a.st.FileDest(id)
 	if err != nil {
 		http.Error(w, "Failed to create file", http.StatusInternalServerError)

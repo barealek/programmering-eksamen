@@ -12,7 +12,6 @@ import (
 func (a *Api) Download(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	krypteringsKey := r.URL.Query().Get("key")
-	fmt.Printf("id: %v\n", id)
 
 	// Skaf entry file
 	e := a.st.Get(id)
@@ -55,16 +54,12 @@ func (a *Api) Download(w http.ResponseWriter, r *http.Request) {
 	// Kryptering
 	if krypteringsKey != "" {
 
-		fmt.Println("Dekryptering med key:", krypteringsKey)
-
 		streamReader, err := encryption.EncryptedReader(krypteringsKey, readCh)
 		if err != nil {
 			http.Error(w, "Failed to create encrypted reader", http.StatusInternalServerError)
 			return
 		}
 		readCh = streamReader
-	} else {
-		fmt.Println("Ingen dekryptering")
 	}
 
 	// Komprimering

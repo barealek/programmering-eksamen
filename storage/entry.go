@@ -13,5 +13,5 @@ type Entry struct {
 }
 
 func (e *Entry) String() string {
-	return fmt.Sprintf("ID:%s Filnavn:%s Krypteret:%t AdminSecret:%s DownloadsTilbage:%d", e.ID, e.Filnavn, e.Krypteret, e.AdminSecret, e.DownloadsTilbage)
+	return fmt.Sprintf("ID:%s Filnavn:%s Krypteret:%t DownloadsTilbage:%d", e.ID, e.Filnavn, e.Krypteret, e.DownloadsTilbage)
 }

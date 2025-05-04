@@ -33,7 +33,6 @@ func (a *Api) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("Slettede", id, "fra", r.RemoteAddr)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
 }

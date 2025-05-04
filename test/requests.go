@@ -1,9 +1,12 @@
 package test
 
-import "net/http"
+import (
+	"bytes"
+	"net/http"
+)
 
 type TestWriter struct {
-	buf    []byte
+	buf    *bytes.Buffer
 	header http.Header
 	status int
 }
@@ -13,22 +16,21 @@ func (w *TestWriter) Header() http.Header {
 }
 
 func (w *TestWriter) Write(b []byte) (int, error) {
-	w.buf = append(w.buf, b...)
-	return len(b), nil
+	return w.buf.Write(b)
 }
 
 func (w *TestWriter) WriteHeader(status int) {
 	w.status = status
 }
 
-func (w *TestWriter) Result() ([]byte, int) {
+func (w *TestWriter) Result() (*bytes.Buffer, int) {
 	return w.buf, w.status
 }
 
 func newTestWriter() *TestWriter {
 	return &TestWriter{
-		buf:    make([]byte, 0),
+		buf:    new(bytes.Buffer),
 		header: make(http.Header),
-		status: 0,
+		status: 200,
 	}
 }
