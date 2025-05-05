@@ -15,6 +15,7 @@ func (a *Api) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	clientSecret := r.URL.Query().Get("secret")
+	fmt.Printf("clientSecret: %v\n", clientSecret)
 	if clientSecret != e.AdminSecret {
 		http.Error(w, "Wrong secret", http.StatusForbidden)
 		return

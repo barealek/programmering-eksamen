@@ -101,8 +101,6 @@ func (st *fs) Delete(e *Entry) error {
 		return err
 	}
 
-	// st.Save()
-
 	return nil
 }
 

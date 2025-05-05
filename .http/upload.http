@@ -1,5 +1,5 @@
 ###
-PUT http://localhost:3000/api/test.png?downloads=5
+PUT http://localhost:3000/api/test.png?key=kode&downloads=3
 Content-Type: image/jpeg
 
 < jamaica.jpg
@@ -14,5 +14,3 @@ Content-Type: binary/octet-stream
 ###
 PUT http://localhost:3000/api/morten.txt?key=privat
 Content-Type: text/plain
-
-Hej morten, how does it go with your exam?

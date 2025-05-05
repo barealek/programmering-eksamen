@@ -16,7 +16,7 @@ import (
 
 func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 
-	// Hent vigtige informationer fra HTTp-requesten
+	// Hent vigtige informationer fra HTTP-requesten
 	navn := r.PathValue("filnavn")
 	krypteringsKey := r.URL.Query().Get("key")
 	antalDownloadsStr := r.URL.Query().Get("downloads")
@@ -30,6 +30,7 @@ func (a *Api) Upload(w http.ResponseWriter, r *http.Request) {
 		antalDownloads = -1 // Hvis antalDownloads ikke er angivet, sæt det til -1, som vi har defineret som uendeligt downloads
 	}
 
+	// Lav en io.Writer
 	var writeChain io.Writer
 	defer r.Body.Close()
 

@@ -12,6 +12,7 @@ import (
 func (a *Api) Download(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	krypteringsKey := r.URL.Query().Get("key")
+	fmt.Printf("krypteringsKey: %v\n", krypteringsKey)
 
 	// Skaf entry file
 	e := a.st.Get(id)
@@ -65,6 +66,7 @@ func (a *Api) Download(w http.ResponseWriter, r *http.Request) {
 	// Komprimering
 	gzipReader, err := gzip.NewReader(readCh)
 	if err != nil {
+		fmt.Println(err)
 		// Der kommer ikke nogen fejl af at have en forkert dekrypteringskode
 		// ovenfor. Hvis der er en fejl hernede, er det højst sandsynligt på
 		// grund af, at der er en forkert dekrypteringskode ovenfor.
